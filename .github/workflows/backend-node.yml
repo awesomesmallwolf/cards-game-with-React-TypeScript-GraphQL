@@ -1,0 +1,160 @@
+name: backend-node
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+    paths:
+      - 'node-server/**/*'
+
+jobs:
+  deps-and-codegen:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: Cache node_modules
+        uses: actions/cache@main
+        id: cache-node
+        env:
+          cache-name: cache-node
+        with:
+          path: |
+            node_modules
+            frontend/node_modules
+            node-server/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        # Always run this, so it throws if the package and lockfile don't match
+        run: yarn install --non-interactive --frozen-lockfile
+      - name: GQL Codegen
+        run: cd node-server && yarn run gql-codegen
+      - uses: actions/upload-artifact@v2-preview
+        with:
+          name: generated
+          path: './node-server/src/generated/*'
+
+  build:
+    runs-on: ubuntu-latest
+    needs: deps-and-codegen
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: Restore dependencies
+        uses: actions/cache@main
+        env:
+          cache-name: cache-node
+        with:
+          path: |
+            node_modules
+            frontend/node_modules
+            node-server/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+      - name: Download GQL codegen
+        uses: actions/download-artifact@v2-preview
+        with:
+          name: generated
+          path: './node-server/src/generated/*'
+      - run: cd node-server && yarn build
+
+  test:
+    runs-on: ubuntu-latest
+    needs: deps-and-codegen
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: Restore dependencies
+        uses: actions/cache@main
+        env:
+          cache-name: cache-node
+        with:
+          path: |
+            node_modules
+            frontend/node_modules
+            node-server/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+      - name: Download GQL codegen
+        uses: actions/download-artifact@v2-preview
+        with:
+          name: generated
+          path: './node-server/src/generated/*'
+      - run: cd node-server && yarn jest
+
+  eslint:
+    runs-on: ubuntu-latest
+    needs: deps-and-codegen
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: Restore dependencies
+        uses: actions/cache@main
+        env:
+          cache-name: cache-node
+        with:
+          path: |
+            node_modules
+            frontend/node_modules
+            node-server/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+      - name: Download GQL codegen
+        uses: actions/download-artifact@v2-preview
+        with:
+          name: generated
+          path: './node-server/src/generated/*'
+      - run: cd node-server && yarn eslint:check
+
+  prettier:
+    runs-on: ubuntu-latest
+    needs: deps-and-codegen
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: Restore dependencies
+        uses: actions/cache@main
+        env:
+          cache-name: cache-node
+        with:
+          path: |
+            node_modules
+            frontend/node_modules
+            node-server/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+      - run: cd node-server && yarn prettier:check
+
+  # audit:
+  #   runs-on: ubuntu-latest
+  #   needs: deps-and-codegen
+  #   if: github.ref == 'refs/heads/master'
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Use Node.js
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: '14.x'
+  #     - name: Restore dependencies
+  #       uses: actions/cache@main
+  #       env:
+  #         cache-name: cache-node
+  #       with:
+  #         path: |
+  #           node_modules
+  #           frontend/node_modules
+  #           node-server/node_modules
+  #         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+  #     - run: yarn audit --groups dependencies

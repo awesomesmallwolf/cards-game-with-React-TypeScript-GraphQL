@@ -1,0 +1,22 @@
+# jobs to trigger after cloning the interview template
+name: Post Template Clone
+
+on: workflow_dispatch
+
+jobs:
+  remove-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+
+      - name: configure git
+        run: |
+          git config user.name "Uplift Actions Bot"
+          git config user.email "<github@uplift.ltd>"
+
+      - name: Remove scheduled checks
+        run: |
+          git rm -f ./.github/workflows/all-os-checks.yml
+          git commit -m 'remove scheduled checks, should only run on template'
+          git push origin master

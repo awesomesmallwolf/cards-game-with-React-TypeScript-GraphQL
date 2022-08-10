@@ -1,0 +1,145 @@
+name: frontend
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+    paths:
+      - 'frontend/**/*'
+
+env:
+  DISABLE_ESLINT_PLUGIN: true
+
+jobs:
+  install-dependencies:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: Cache node_modules
+        uses: actions/cache@main
+        id: cache-node
+        env:
+          cache-name: cache-node
+        with:
+          path: |
+            node_modules
+            frontend/node_modules
+            node-server/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+      - name: Install dependencies
+        # Always run this, so it throws if the package and lockfile don't match
+        run: yarn install --non-interactive --frozen-lockfile
+
+  build:
+    runs-on: ubuntu-latest
+    needs: install-dependencies
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: Restore dependencies
+        uses: actions/cache@main
+        env:
+          cache-name: cache-node
+        with:
+          path: |
+            node_modules
+            frontend/node_modules
+            node-server/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+      - run: cd frontend && yarn build
+      - run: cd frontend && yarn analyze
+      - uses: actions/upload-artifact@v2-preview
+        with:
+          name: analyze
+          path: ./report.html
+
+  test:
+    runs-on: ubuntu-latest
+    needs: install-dependencies
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: Restore dependencies
+        uses: actions/cache@main
+        env:
+          cache-name: cache-node
+        with:
+          path: |
+            node_modules
+            frontend/node_modules
+            node-server/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+      - run: cd frontend && yarn jest
+
+  eslint:
+    runs-on: ubuntu-latest
+    needs: install-dependencies
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: Restore dependencies
+        uses: actions/cache@main
+        env:
+          cache-name: cache-node
+        with:
+          path: |
+            node_modules
+            frontend/node_modules
+            node-server/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+      - run: cd frontend && yarn eslint:check
+
+  prettier:
+    runs-on: ubuntu-latest
+    needs: install-dependencies
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: '14.x'
+      - name: Restore dependencies
+        uses: actions/cache@main
+        env:
+          cache-name: cache-node
+        with:
+          path: |
+            node_modules
+            frontend/node_modules
+            node-server/node_modules
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+      - run: cd frontend && yarn prettier:check
+
+  # audit:
+  #   runs-on: ubuntu-latest
+  #   needs: install-dependencies
+  #   if: github.ref == 'refs/heads/master'
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Use Node.js
+  #       uses: actions/setup-node@v1
+  #       with:
+  #         node-version: '14.x'
+  #     - name: Restore dependencies
+  #       uses: actions/cache@main
+  #       env:
+  #         cache-name: cache-node
+  #       with:
+  #         path: node_modules
+  #         key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/yarn.lock') }}
+  #     - run: yarn audit --groups dependencies
