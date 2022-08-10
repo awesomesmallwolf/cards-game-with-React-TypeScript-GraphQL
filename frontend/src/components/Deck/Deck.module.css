@@ -1,0 +1,35 @@
+.section {
+  @apply flex flex-col grow;
+}
+
+.header {
+  @apply flex align-middle justify-center xl:space-x-20 space-x-5 xl:pt-[90px] sm:pt-[50px] pt-5;
+}
+
+.main {
+  @apply grow flex items-center justify-center;
+}
+
+.deal {
+  @apply mx-auto;
+}
+
+.reset {
+  @apply xl:m-[60px] m-[50px] mx-auto xl:mr-[60px] xl:ml-auto;
+}
+
+.again {
+  @apply mx-auto xl:mb-[167px] mb-[177px] mt-[72px];
+}
+
+.badge {
+  @apply w-full flex items-center justify-center -translate-y-1/3;
+}
+
+.wiggle {
+  @apply animate-wiggle;
+}
+
+.paragraph {
+  @apply font-courier text-2xl text-white;
+}

@@ -1,0 +1,7 @@
+.error {
+  @apply text-red w-full h-screen text-lg flex flex-col justify-around items-center;
+}
+
+.title {
+  @apply text-3xl;
+}

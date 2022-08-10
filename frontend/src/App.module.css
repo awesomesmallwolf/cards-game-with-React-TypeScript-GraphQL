@@ -1,0 +1,4 @@
+.body {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%), #0a863e;
+  @apply text-center h-screen flex flex-col overflow-auto;
+}

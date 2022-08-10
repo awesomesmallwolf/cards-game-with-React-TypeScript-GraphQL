@@ -1,0 +1,36 @@
+.card {
+  @apply relative text-left w-16 h-20 sm:w-[103px] sm:h-[141px] xl:w-48 xl:h-66;
+  @apply rounded-sm xl:rounded-lg bg-white box-content;
+}
+
+.number {
+  @apply block font-courier font-bold text-2xl sm:text-4xl xl:text-large ml-2 sm:ml-4 xl:ml-6 mt-2 sm:mt-4;
+}
+
+.symbol {
+  @apply ml-5 xl:ml-9;
+}
+
+.image {
+  @apply ml-auto mr-4 xl:mr-[31px];
+}
+
+.background {
+  @apply absolute bottom-4 xl:bottom-[33px] w-full;
+}
+
+.clover {
+  @apply text-black;
+}
+
+.diamond {
+  @apply text-red;
+}
+
+.heart {
+  @apply text-red;
+}
+
+.spade {
+  @apply text-black;
+}

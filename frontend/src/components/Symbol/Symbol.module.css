@@ -1,0 +1,7 @@
+.symbol {
+  @apply w-6 h-6 sm:w-12 sm:h-12 xl:w-[90px] xl:h-[90px];
+}
+
+.small {
+  @apply w-2 h-2 sm:w-5 sm:h-5 xl:w-9 xl:h-9;
+}

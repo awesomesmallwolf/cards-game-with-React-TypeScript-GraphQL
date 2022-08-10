@@ -1,0 +1,27 @@
+.group {
+  @apply flex xl:space-x-12 content-between justify-center flex-wrap xl:flex-nowrap xl:p-28;
+}
+
+.card {
+  @apply m-2 sm:m-5 xl:m-0;
+}
+
+.-curved-2 {
+  @apply xl:rotate-15 -animate-popup-2;
+}
+
+.-curved-1 {
+  @apply xl:rotate-7.5 xl:translate-y-12 -animate-popup-1;
+}
+
+.curved {
+  @apply xl:translate-y-16 animate-popup;
+}
+
+.curved-1 {
+  @apply xl:-rotate-7.5 xl:translate-y-12 animate-popup-1;
+}
+
+.curved-2 {
+  @apply xl:-rotate-15 animate-popup-2;
+}

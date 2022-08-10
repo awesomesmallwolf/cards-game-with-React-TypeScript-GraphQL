@@ -1,0 +1,13 @@
+.button {
+  @apply flex items-center font-alfa bg-yellow-dark rounded text-lg sm:text-2xl;
+  @apply px-4 sm:px-8 sm:h-[50px] pt-[1px] hover:bg-yellow transition-colors active:scale-95;
+}
+
+.big {
+  @apply text-3xl sm:text-extra-big pb-1 sm:h-[103px] pt-1 px-6 sm:pt-[5px] sm:px-[59px];
+}
+
+.secondary {
+  @apply bg-transparent text-yellow-dark border-yellow-dark border-3;
+  @apply hover:text-yellow hover:border-yellow hover:bg-transparent;
+}
