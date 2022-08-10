@@ -1,0 +1,15 @@
+type GameStatus {
+  hand: [Int!]
+  cardsLeft: Int!
+  acesLeft: Int!
+  finished: Boolean!
+}
+
+type Query {
+  game: GameStatus
+}
+
+type Mutation {
+  deal: GameStatus
+  reset: GameStatus
+}

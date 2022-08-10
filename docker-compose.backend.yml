@@ -1,0 +1,23 @@
+version: '3'
+services:
+  db:
+    image: postgres
+    platform: linux/amd64
+    container_name: uplifty-db
+    environment:
+      - POSTGRES_HOST_AUTH_METHOD=trust
+  uplifty:
+    build:
+      context: .
+      dockerfile: ./docker/Docker.server/Dockerfile
+    image: uplifty
+    env_file: .env
+    container_name: uplifty
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    links:
+      - db:postgres
