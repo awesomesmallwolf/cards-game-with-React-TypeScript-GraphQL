@@ -1,0 +1,39 @@
+{
+  "private": true,
+  "name": "@uplift-ltd/interview-frontend-node-server",
+  "version": "0.1.0",
+  "proxy": "http://localhost:5000",
+  "license": "UNLICENSED",
+  "scripts": {
+    "gql-codegen": "graphql-codegen --config codegen.yml",
+    "start": "ts-node-dev src/index.ts",
+    "start:build": "node build/index.js",
+    "build": "run-s clean compile copy",
+    "clean": "rm -rf build",
+    "compile": "tsc --outDir build",
+    "copy": "cp src/schema.graphql build/schema.graphql",
+    "test": "run-s eslint:check prettier:check jest",
+    "jest": "jest",
+    "eslint:check": "eslint src/ --ext .js,.jsx,.ts,.tsx",
+    "prettier:write": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css,scss}\"",
+    "prettier:check": "prettier --list-different \"**/*.{js,jsx,ts,tsx,json,md,css,scss}\""
+  },
+  "dependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^8.5.8",
+    "@types/lodash": "^4.14.182",
+    "@types/redis": "^4.0.11",
+    "apollo-server-express": "^2.22.2",
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "graphql": "^15.5.0",
+    "redis": "^4.2.0",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^4.5.5",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "graphql-tools": "^7.0.4",
+    "jest": "^26.6.3"
+  }
+}
