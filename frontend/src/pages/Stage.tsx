@@ -1,7 +1,7 @@
 import { useQuery, useMutation } from '@apollo/client';
 import { useEffect } from 'react';
 import Deck from '../components/Deck/Deck';
-import ErrorBox from '../components/ErrorBox/ErrorBox';
+import ErrorBox from '../components/ErrorBoxs/ErrorBox';
 import { DealDocument } from '../graphql/mutations/Deal';
 import { ResetDocument } from '../graphql/mutations/Reset';
 import { GameDetailsDocument } from '../graphql/queries/GameDetails';
